@@ -1,6 +1,7 @@
 package main
 
 import (
+	"demo/gonum/comm"
 	"image/color"
 	"math"
 	"math/rand"
@@ -69,16 +70,17 @@ func main() {
 	aim.Shape = draw.CircleGlyph{}
 	aim.Color = color.White
 
-	plt, err := plot.New()
-	if err != nil {
-		panic(err)
-	}
+	plt := plot.New()
+
 	plt.Y.Min, plt.X.Min, plt.Y.Max, plt.X.Max = 0, 0, 100, 100
 
 	plt.Add(heatmap, scatter, pathPoints, pathLines, aim)
 
-	if err := plt.Save(5*vg.Inch, 5*vg.Inch, "08-nelder-mead-with-recorder.png"); err != nil {
+	filename := "08-nelder-mead-with-recorder.png"
+	if err := plt.Save(5*vg.Inch, 5*vg.Inch, filename); err != nil {
 		panic(err)
+	} else {
+		comm.OpenImage(filename)
 	}
 }
 

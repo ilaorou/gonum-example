@@ -1,6 +1,7 @@
 package main
 
 import (
+	"demo/gonum/comm"
 	"math/rand"
 
 	"gonum.org/v1/plot"
@@ -15,30 +16,20 @@ func main() {
 	points2 := plotter.XYs{}
 
 	for i := 0; i <= 10; i++ {
-		points1 = append(points1, plotter.XY{
-			X: float64(i),
-			Y: a*float64(i) + b,
-		})
-		points2 = append(points2, plotter.XY{
-			X: float64(i),
-			Y: a*float64(i) + b + (2*rand.Float64() - 1),
-		})
+		points1 = append(points1, plotter.XY{X: float64(i), Y: a*float64(i) + b})
+		points2 = append(points2, plotter.XY{X: float64(i), Y: a*float64(i) + b + (2*rand.Float64() - 1)})
 	}
 
-	plt, err := plot.New()
-	if err != nil {
-		panic(err)
-	}
+	plt := plot.New()
 	plt.Y.Min, plt.X.Min, plt.Y.Max, plt.X.Max = 0, 0, 10, 10
 
-	if err := plotutil.AddLinePoints(plt,
-		"line1", points1,
-		"line2", points2,
-	); err != nil {
+	if err := plotutil.AddLinePoints(plt, "l1", points1, "l2", points2); err != nil {
 		panic(err)
 	}
 
 	if err := plt.Save(5*vg.Inch, 5*vg.Inch, "02-draw-linepoint.png"); err != nil {
 		panic(err)
+	} else {
+		comm.OpenImage("02-draw-linepoint.png")
 	}
 }

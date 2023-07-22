@@ -1,6 +1,7 @@
 package main
 
 import (
+	"demo/gonum/comm"
 	"math"
 	"math/rand"
 
@@ -17,14 +18,8 @@ func main() {
 	points2 := plotter.XYs{}
 
 	for i := 0; i <= 10; i++ {
-		points1 = append(points1, plotter.XY{
-			X: float64(i),
-			Y: a*float64(i) + b,
-		})
-		points2 = append(points2, plotter.XY{
-			X: float64(i),
-			Y: a*float64(i) + b + (2*rand.Float64() - 1),
-		})
+		points1 = append(points1, plotter.XY{X: float64(i), Y: a*float64(i) + b})
+		points2 = append(points2, plotter.XY{X: float64(i), Y: a*float64(i) + b + (2*rand.Float64() - 1)})
 	}
 
 	result, err := optimize.Minimize(optimize.Problem{
@@ -49,27 +44,21 @@ func main() {
 	fa, fb := result.X[0], result.X[1]
 	points3 := plotter.XYs{}
 	for i := 0; i <= 10; i++ {
-		points3 = append(points3, plotter.XY{
-			X: float64(i),
-			Y: fa*float64(i) + fb,
-		})
+		points3 = append(points3, plotter.XY{X: float64(i), Y: fa*float64(i) + fb})
 	}
 
-	plt, err := plot.New()
-	if err != nil {
-		panic(err)
-	}
+	plt := plot.New()
+
 	plt.Y.Min, plt.X.Min, plt.Y.Max, plt.X.Max = 0, 0, 10, 10
 
-	if err := plotutil.AddLinePoints(plt,
-		"line1", points1,
-		"line2", points2,
-		"line3", points3,
-	); err != nil {
+	if err := plotutil.AddLinePoints(plt, "line1", points1, "line2", points2, "line3", points3); err != nil {
 		panic(err)
 	}
 
-	if err := plt.Save(5*vg.Inch, 5*vg.Inch, "10-optimize-fit.png"); err != nil {
+	filename := "10-optimize-fit.png"
+	if err = plt.Save(5*vg.Inch, 5*vg.Inch, filename); err != nil {
 		panic(err)
+	} else {
+		comm.OpenImage(filename)
 	}
 }

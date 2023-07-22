@@ -1,6 +1,7 @@
 package main
 
 import (
+	"demo/gonum/comm"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/plotutil"
@@ -17,10 +18,8 @@ func main() {
 		})
 	}
 
-	plt, err := plot.New()
-	if err != nil {
-		panic(err)
-	}
+	plt := plot.New()
+
 	plt.Y.Min, plt.X.Min, plt.Y.Max, plt.X.Max = 0, 0, 10, 10
 
 	if err := plotutil.AddLines(plt,
@@ -31,5 +30,7 @@ func main() {
 
 	if err := plt.Save(5*vg.Inch, 5*vg.Inch, "01-draw-line.png"); err != nil {
 		panic(err)
+	} else {
+		comm.OpenImage("01-draw-line.png")
 	}
 }

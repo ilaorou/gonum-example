@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"demo/gonum/comm"
 	"image/color"
 	"math"
 	"math/rand"
@@ -116,7 +116,7 @@ func main() {
 		aim.Shape = draw.CircleGlyph{}
 		aim.Color = color.White
 
-		plt, err := plot.New()
+		plt := plot.New()
 		if err != nil {
 			panic(err)
 		}
@@ -125,8 +125,11 @@ func main() {
 
 		plt.Add(heatmap, scatter, pathPoints, pathLines, aim)
 
-		if err := plt.Save(5*vg.Inch, 5*vg.Inch, fmt.Sprintf("09-other-methods.%s.png", method.Name)); err != nil {
+		filename := "09-other-methods." + method.Name + ".png"
+		if err = plt.Save(5*vg.Inch, 5*vg.Inch, filename); err != nil {
 			panic(err)
+		} else {
+			comm.OpenImage(filename)
 		}
 	}
 }
